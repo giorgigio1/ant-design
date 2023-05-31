@@ -2,6 +2,7 @@ import "./App.css";
 import { useState } from "react";
 import { Table, Button, Modal } from "antd";
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
+import { ModalWindow } from "./ModalWindow";
 
 interface DataSourceItem {
   id: number;
@@ -154,13 +155,6 @@ function App() {
   };
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-  // const [value, setValue] = useState("");
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [gender, setGender] = useState("");
-  const [street, setStreet] = useState("");
-  const [city, setCity] = useState("");
-  const [phone, setPhone] = useState("");
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -170,50 +164,13 @@ function App() {
     setIsModalOpen(false);
   };
 
-  const handleGenderChange = (event: any) => {
-    setGender(event.target.value);
-  };
-
-  const handleInputChange = (event: any) => {
-    setName(event.target.value);
-    setEmail(event.target.value);
-    setGender(event.target.value);
-    setStreet(event.target.value);
-    setCity(event.target.value);
-    setPhone(event.target.value);
-  };
-
   return (
     <div className="app">
       <Button onClick={showModal} type="primary" style={{ margin: 20 }}>
         Add Person
       </Button>
       <Table bordered rowKey="id" columns={columns} dataSource={dataSource} />
-      <Modal
-        title="Modal"
-        open={isModalOpen}
-        onOk={closeModal}
-        onCancel={closeModal}
-        width={800}
-        centered
-      >
-        <label htmlFor="">name</label>
-        <input type="text" value={name} onChange={handleInputChange} />
-        <label htmlFor="">email</label>
-        <input type="text" value={email} onChange={handleInputChange} />
-        <label htmlFor="">gender</label>
-        <select value={gender} onChange={handleInputChange} name="">
-          {gender === "" && <option value="">Select Gender</option>}
-          <option value="male">Male</option>
-          <option value="female">Female</option>
-        </select>
-        <label htmlFor="">street</label>
-        <input type="text" value={street} onChange={handleInputChange} />
-        <label htmlFor="">city</label>
-        <input type="text" value={city} onChange={handleInputChange} />
-        <label htmlFor="">phone</label>
-        <input type="text" value={phone} onChange={handleInputChange} />
-      </Modal>
+      <ModalWindow modal={isModalOpen} closeModal={closeModal} />
     </div>
   );
 }
