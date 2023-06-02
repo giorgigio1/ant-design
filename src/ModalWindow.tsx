@@ -1,13 +1,38 @@
 import { useState } from "react";
 import { Modal } from "antd";
 
-export const ModalWindow = ({ modal, closeModal }: any) => {
+export const ModalWindow = ({
+  isModalOpen,
+  setIsModalOpen,
+  dataSource,
+  setDataSource,
+}: any) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [gender, setGender] = useState("");
   const [street, setStreet] = useState("");
   const [city, setCity] = useState("");
   const [phone, setPhone] = useState("");
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+
+  const onAddPerson = () => {
+    const newPerson = {
+      id: dataSource.length + 1,
+      name: name,
+      email: email,
+      gender: gender,
+      address: {
+        street: street,
+        city: city,
+      },
+      phone: phone,
+    };
+    setDataSource([...dataSource, newPerson]);
+    setIsModalOpen(false);
+  };
 
   const handleNameChange = (event: any) => {
     setName(event.target.value);
@@ -35,10 +60,10 @@ export const ModalWindow = ({ modal, closeModal }: any) => {
 
   return (
     <Modal
-      title="Modal"
-      open={modal}
-      onOk={closeModal}
-      onCancel={closeModal}
+      title="Add new person"
+      open={isModalOpen}
+      onOk={onAddPerson}
+      onCancel={handleCancel}
       width={800}
       centered
     >

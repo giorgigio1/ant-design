@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Table, Button, Modal } from "antd";
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import { ModalWindow } from "./ModalWindow";
+import { EditModal } from "./EditModal";
 
 interface DataSourceItem {
   id: number;
@@ -24,9 +25,12 @@ interface ColumnItem {
 }
 
 function App() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [editingPerson, setEditingPerson] = useState<any>(null);
   const [dataSource, setDataSource] = useState<DataSourceItem[]>([
     {
-      id: 10,
+      id: 1,
       name: "Vilma Jefferson",
       email: "vilmajefferson@gology.com",
       gender: "female",
@@ -37,7 +41,7 @@ function App() {
       phone: "+1 (814) 496-3905",
     },
     {
-      id: 11,
+      id: 2,
       name: "Cassandra Nguyen",
       email: "cassandranguyen@gology.com",
       gender: "female",
@@ -48,7 +52,7 @@ function App() {
       phone: "+1 (946) 426-2243",
     },
     {
-      id: 12,
+      id: 3,
       name: "Lenora Clements",
       email: "lenoraclements@gology.com",
       gender: "female",
@@ -59,7 +63,7 @@ function App() {
       phone: "+1 (838) 598-2355",
     },
     {
-      id: 13,
+      id: 4,
       name: "Hanson Goodwin",
       email: "hansongoodwin@gology.com",
       gender: "male",
@@ -113,10 +117,12 @@ function App() {
       key: 8,
       title: "Action",
       render: (record) => {
-        // console.log(record, "action");
         return (
           <>
-            <EditOutlined onClick={showModal} style={{ cursor: "pointer" }} />
+            <EditOutlined
+              onClick={() => onEditPerson(record)}
+              style={{ cursor: "pointer" }}
+            />
             <DeleteOutlined
               onClick={() => onDeletePerson(record)}
               style={{ color: "red", marginLeft: 10, cursor: "pointer" }}
@@ -127,50 +133,49 @@ function App() {
     },
   ];
 
-  const onAddPerson = () => {
-    const random = Math.round(Math.random() * 1000);
-    const newItem = {
-      id: dataSource.length + 1,
-      name: random.toString(),
-      email: `${random}@gology.com`,
-      gender: random % 2 === 0 ? "female" : "male",
-      address: {
-        street: `${random}th Street`,
-        city: `${random}th City`,
-      },
-      phone: "+1 (814) 496-3905",
-    };
-    setDataSource([...dataSource, newItem]);
-  };
-
   const onEditPerson = (record: any) => {
-    console.log(record);
+    setIsEditModalOpen(true);
+    setEditingPerson({ ...record });
   };
+
   const onDeletePerson = (action: any) => {
-    // console.log(action, "delete");
-    setDataSource((pre) => {
-      // console.log(pre)
-      return pre.filter((item) => item.id !== action.id);
+    Modal.confirm({
+      title: "Are you sure, you want to delete this person?",
+      icon: <DeleteOutlined />,
+      okText: "Yes",
+      okType: "danger",
+      onOk: () => {
+        setDataSource((pre) => {
+          return pre.filter((item) => item.id !== action.id);
+        });
+      },
     });
-  };
-
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const showModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const closeModal = () => {
-    setIsModalOpen(false);
   };
 
   return (
     <div className="app">
-      <Button onClick={showModal} type="primary" style={{ margin: 20 }}>
+      <Button
+        onClick={() => setIsModalOpen(true)}
+        type="primary"
+        style={{ margin: 20 }}
+      >
         Add Person
       </Button>
       <Table bordered rowKey="id" columns={columns} dataSource={dataSource} />
-      <ModalWindow modal={isModalOpen} closeModal={closeModal} />
+      <ModalWindow
+        isModalOpen={isModalOpen}
+        setIsModalOpen={setIsModalOpen}
+        dataSource={dataSource}
+        setDataSource={setDataSource}
+      />
+      <EditModal
+        editingPerson={editingPerson}
+        setEditingPerson={setEditingPerson}
+        isEditModalOpen={isEditModalOpen}
+        setIsEditModalOpen={setIsEditModalOpen}
+        dataSource={dataSource}
+        setDataSource={setDataSource}
+      />
     </div>
   );
 }
