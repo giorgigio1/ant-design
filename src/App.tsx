@@ -1,6 +1,6 @@
 import "./App.css";
 import { useState } from "react";
-import { Table, Button, Modal } from "antd";
+import { Table, Button, Modal, Checkbox, Form, Input } from "antd";
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import { ModalWindow } from "./ModalWindow";
 import { EditModal } from "./EditModal";
@@ -74,6 +74,12 @@ function App() {
       phone: "+1 (947) 576-2508",
     },
   ]);
+
+  const doubleClickEdit = (record: any) => {
+    return {
+      onDoubleClick: () => onEditPerson(record),
+    };
+  };
 
   const columns: ColumnItem[] = [
     {
@@ -158,10 +164,17 @@ function App() {
         onClick={() => setIsModalOpen(true)}
         type="primary"
         style={{ margin: 20 }}
+        // htmlType="submit"
       >
         Add Person
       </Button>
-      <Table bordered rowKey="id" columns={columns} dataSource={dataSource} />
+      <Table
+        onRow={doubleClickEdit}
+        bordered
+        rowKey="id"
+        columns={columns}
+        dataSource={dataSource}
+      />
       <ModalWindow
         isModalOpen={isModalOpen}
         setIsModalOpen={setIsModalOpen}

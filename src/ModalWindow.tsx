@@ -1,5 +1,6 @@
-import { useState } from "react";
-import { Modal } from "antd";
+import { Modal, Button } from "antd";
+import { useFormik } from "formik";
+import { basicSchema } from "./schema/schema";
 
 export const ModalWindow = ({
   isModalOpen,
@@ -7,12 +8,31 @@ export const ModalWindow = ({
   dataSource,
   setDataSource,
 }: any) => {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [gender, setGender] = useState("");
-  const [street, setStreet] = useState("");
-  const [city, setCity] = useState("");
-  const [phone, setPhone] = useState("");
+  const {
+    handleSubmit,
+    handleChange,
+    handleBlur,
+    isSubmitting,
+    values,
+    errors,
+    touched,
+  } = useFormik({
+    initialValues: {
+      name: "",
+      email: "",
+      gender: "",
+      street: "",
+      city: "",
+      phone: "",
+    },
+    validationSchema: basicSchema,
+    onSubmit: async (_, actions) => {
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+      onAddPerson();
+      setIsModalOpen(false);
+      actions.resetForm();
+    },
+  });
 
   const handleCancel = () => {
     setIsModalOpen(false);
@@ -21,68 +41,108 @@ export const ModalWindow = ({
   const onAddPerson = () => {
     const newPerson = {
       id: dataSource.length + 1,
-      name: name,
-      email: email,
-      gender: gender,
+      name: values.name,
+      email: values.email,
+      gender: values.gender,
       address: {
-        street: street,
-        city: city,
+        street: values.street,
+        city: values.city,
       },
-      phone: phone,
+      phone: values.phone,
     };
     setDataSource([...dataSource, newPerson]);
-    setIsModalOpen(false);
-  };
-
-  const handleNameChange = (event: any) => {
-    setName(event.target.value);
-  };
-
-  const handleEmailChange = (event: any) => {
-    setEmail(event.target.value);
-  };
-
-  const handleGenderChange = (event: any) => {
-    setGender(event.target.value);
-  };
-
-  const handleStreetChange = (event: any) => {
-    setStreet(event.target.value);
-  };
-
-  const handleCityChange = (event: any) => {
-    setCity(event.target.value);
-  };
-
-  const handlePhonChange = (event: any) => {
-    setPhone(event.target.value);
   };
 
   return (
     <Modal
       title="Add new person"
       open={isModalOpen}
-      onOk={onAddPerson}
+      onOk={() => handleSubmit()}
       onCancel={handleCancel}
+      footer={[
+        <Button key="back" onClick={handleCancel}>
+          Cancel
+        </Button>,
+        <Button key="submit" type="primary" onClick={() => handleSubmit()} disabled={isSubmitting}>
+          Yes
+        </Button>,
+      ]}
       width={800}
       centered
     >
-      <label htmlFor="">name</label>
-      <input type="text" value={name} onChange={handleNameChange} />
-      <label htmlFor="">email</label>
-      <input type="text" value={email} onChange={handleEmailChange} />
-      <label htmlFor="">gender</label>
-      <select value={gender} onChange={handleGenderChange} name="">
-        {gender === "" && <option value="">Select Gender</option>}
-        <option value="male">Male</option>
-        <option value="female">Female</option>
-      </select>
-      <label htmlFor="">street</label>
-      <input type="text" value={street} onChange={handleStreetChange} />
-      <label htmlFor="">city</label>
-      <input type="text" value={city} onChange={handleCityChange} />
-      <label htmlFor="">phone</label>
-      <input type="text" value={phone} onChange={handlePhonChange} />
+      <form onSubmit={handleSubmit} autoComplete="off">
+        <label htmlFor="name">name</label>
+        <input
+          name="name"
+          type="text"
+          value={values.name}
+          onChange={handleChange}
+          onBlur={handleBlur}
+          className={errors.name && touched.name ? "input-error" : ""}
+        />
+        {errors.name && touched.name && <p className="error">{errors.name}</p>}
+        <label htmlFor="email">email</label>
+        <input
+          name="email"
+          type="text"
+          value={values.email}
+          onChange={handleChange}
+          onBlur={handleBlur}
+          className={errors.email && touched.email ? "input-error" : ""}
+        />
+        {errors.email && touched.email && (
+          <p className="error">{errors.email}</p>
+        )}
+        <label htmlFor="gender">gender</label>
+        <select
+          name="gender"
+          value={values.gender}
+          onChange={handleChange}
+          onBlur={handleBlur}
+          className={errors.gender && touched.gender ? "input-error" : ""}
+        >
+          {values.gender === "" && <option value="">Select Gender</option>}
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+        </select>
+        {errors.gender && touched.gender && (
+          <p className="error">{errors.gender}</p>
+        )}
+        <label htmlFor="street">street</label>
+        <input
+          name="street"
+          type="text"
+          value={values.street}
+          onChange={handleChange}
+          onBlur={handleBlur}
+          className={errors.street && touched.street ? "input-error" : ""}
+        />
+        {errors.street && touched.street && (
+          <p className="error">{errors.street}</p>
+        )}
+        <label htmlFor="city">city</label>
+        <input
+          name="city"
+          type="text"
+          value={values.city}
+          onChange={handleChange}
+          onBlur={handleBlur}
+          className={errors.city && touched.city ? "input-error" : ""}
+        />
+        {errors.city && touched.city && <p className="error">{errors.city}</p>}
+        <label htmlFor="phone">phone</label>
+        <input
+          name="phone"
+          type="text"
+          value={values.phone}
+          onChange={handleChange}
+          onBlur={handleBlur}
+          className={errors.phone && touched.phone ? "input-error" : ""}
+        />
+        {errors.phone && touched.phone && (
+          <p className="error">{errors.phone}</p>
+        )}
+      </form>
     </Modal>
   );
 };

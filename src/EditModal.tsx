@@ -1,4 +1,6 @@
 import { Modal } from "antd";
+import { useFormik } from "formik";
+import { basicSchema } from "./schema/schema";
 
 export const EditModal = ({
   editingPerson,
@@ -7,6 +9,32 @@ export const EditModal = ({
   setIsEditModalOpen,
   setDataSource,
 }: any) => {
+  const {
+    values,
+    errors,
+    touched,
+    isSubmitting,
+    handleChange,
+    handleBlur,
+    handleSubmit,
+  } = useFormik({
+    initialValues: {
+      name: "",
+      email: "",
+      gender: "",
+      address: {
+        street: "",
+        city: "",
+      },
+      phone: "",
+    },
+    validationSchema: basicSchema,
+    onSubmit: () => {
+      console.log();
+      setIsEditModalOpen(false);
+    },
+  });
+
   const handleOk = () => {
     setDataSource((pre: any) => {
       return pre.map((person: any) => {
@@ -44,7 +72,6 @@ export const EditModal = ({
 
   const handleStreetChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEditingPerson((pre: any) => {
-      console.log("pre", pre);
       return {
         ...pre,
         address: {
@@ -74,56 +101,60 @@ export const EditModal = ({
   };
 
   return (
-    <Modal
-      title="Add new person"
-      open={isEditModalOpen}
-      onOk={handleOk}
-      onCancel={handleCancel}
-      width={800}
-      centered
-    >
-      <label htmlFor="name">name</label>
-      <input
-        type="text"
-        value={editingPerson?.name}
-        onChange={handleNameChange}
-      />
-      <label htmlFor="email">email</label>
-      <input
-        type="text"
-        value={editingPerson?.email}
-        onChange={handleEmailChange}
-      />
-      <label htmlFor="gender">gender</label>
-      <select
-        value={editingPerson?.gender}
-        onChange={handleGenderChange}
-        name=""
+    <form onSubmit={handleSubmit} autoComplete="off">
+      <Modal
+        title="Add new person"
+        open={isEditModalOpen}
+        onOk={handleOk}
+        onCancel={handleCancel}
+        width={800}
+        centered
       >
-        {editingPerson?.gender === "" && (
-          <option value="">Select Gender</option>
-        )}
-        <option value="male">Male</option>
-        <option value="female">Female</option>
-      </select>
-      <label htmlFor="street">street</label>
-      <input
-        type="text"
-        value={editingPerson?.address?.street}
-        onChange={handleStreetChange}
-      />
-      <label htmlFor="city">city</label>
-      <input
-        type="text"
-        value={editingPerson?.address?.city}
-        onChange={handleCityChange}
-      />
-      <label htmlFor="phone">phone</label>
-      <input
-        type="text"
-        value={editingPerson?.phone}
-        onChange={handlePhonChange}
-      />
-    </Modal>
+        <label htmlFor="name">name</label>
+        <input
+          name="name"
+          type="text"
+          value={values.name}
+          onChange={handleChange}
+          onBlur={handleBlur}
+        />
+        <label htmlFor="email">email</label>
+        <input
+          type="text"
+          value={editingPerson?.email}
+          onChange={handleEmailChange}
+        />
+        <label htmlFor="gender">gender</label>
+        <select
+          value={editingPerson?.gender}
+          onChange={handleGenderChange}
+          name=""
+        >
+          {editingPerson?.gender === "" && (
+            <option value="">Select Gender</option>
+          )}
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+        </select>
+        <label htmlFor="street">street</label>
+        <input
+          type="text"
+          value={editingPerson?.address?.street}
+          onChange={handleStreetChange}
+        />
+        <label htmlFor="city">city</label>
+        <input
+          type="text"
+          value={editingPerson?.address?.city}
+          onChange={handleCityChange}
+        />
+        <label htmlFor="phone">phone</label>
+        <input
+          type="text"
+          value={editingPerson?.phone}
+          onChange={handlePhonChange}
+        />
+      </Modal>
+    </form>
   );
 };
