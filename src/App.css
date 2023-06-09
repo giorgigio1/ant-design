@@ -36,6 +36,3 @@ form {
   display: flex;
   flex-direction: column;
 }
-button:disabled {
-  opacity: 0.35;
-}

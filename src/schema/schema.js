@@ -13,7 +13,7 @@ export const basicSchema = yup.object().shape({
   city: yup.string().required("City is required"),
   phone: yup
     .string()
-    // .min(9, "Phone number must be at least 9 digits")
+    .min(9, "Phone number must be at least 9 digits")
     .matches(mobile, { message: "Please enter valid phone number" })
     .required("Phone is required"),
 });

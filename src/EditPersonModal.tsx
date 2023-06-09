@@ -1,40 +1,12 @@
 import { Modal } from "antd";
-import { useFormik } from "formik";
-import { basicSchema } from "./schema/schema";
 
-export const EditModal = ({
+export const EditPersonModal = ({
   editingPerson,
   setEditingPerson,
   isEditModalOpen,
   setIsEditModalOpen,
   setDataSource,
 }: any) => {
-  const {
-    values,
-    errors,
-    touched,
-    isSubmitting,
-    handleChange,
-    handleBlur,
-    handleSubmit,
-  } = useFormik({
-    initialValues: {
-      name: "",
-      email: "",
-      gender: "",
-      address: {
-        street: "",
-        city: "",
-      },
-      phone: "",
-    },
-    validationSchema: basicSchema,
-    onSubmit: () => {
-      console.log();
-      setIsEditModalOpen(false);
-    },
-  });
-
   const handleOk = () => {
     setDataSource((pre: any) => {
       return pre.map((person: any) => {
@@ -101,7 +73,7 @@ export const EditModal = ({
   };
 
   return (
-    <form onSubmit={handleSubmit} autoComplete="off">
+    <form autoComplete="off">
       <Modal
         title="Add new person"
         open={isEditModalOpen}
@@ -114,9 +86,8 @@ export const EditModal = ({
         <input
           name="name"
           type="text"
-          value={values.name}
-          onChange={handleChange}
-          onBlur={handleBlur}
+          value={editingPerson?.name}
+          onChange={handleNameChange}
         />
         <label htmlFor="email">email</label>
         <input

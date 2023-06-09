@@ -1,9 +1,9 @@
 import "./App.css";
 import { useState } from "react";
-import { Table, Button, Modal, Checkbox, Form, Input } from "antd";
+import { Table, Button, Modal } from "antd";
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
-import { ModalWindow } from "./ModalWindow";
-import { EditModal } from "./EditModal";
+import { AddPersonModal } from "./AddPersonModal";
+import { EditPersonModal } from "./EditPersonModal";
 
 interface DataSourceItem {
   id: number;
@@ -164,7 +164,6 @@ function App() {
         onClick={() => setIsModalOpen(true)}
         type="primary"
         style={{ margin: 20 }}
-        // htmlType="submit"
       >
         Add Person
       </Button>
@@ -175,13 +174,13 @@ function App() {
         columns={columns}
         dataSource={dataSource}
       />
-      <ModalWindow
+      <AddPersonModal
         isModalOpen={isModalOpen}
         setIsModalOpen={setIsModalOpen}
         dataSource={dataSource}
         setDataSource={setDataSource}
       />
-      <EditModal
+      <EditPersonModal
         editingPerson={editingPerson}
         setEditingPerson={setEditingPerson}
         isEditModalOpen={isEditModalOpen}
