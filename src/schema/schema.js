@@ -9,8 +9,10 @@ export const basicSchema = yup.object().shape({
     .email("Invalid email address")
     .required("Email is required"),
   gender: yup.string().required("Gender is required"),
-  street: yup.string().required("Street is required"),
-  city: yup.string().required("City is required"),
+  address: yup.object().shape({
+    street: yup.string().required("Street is required"),
+    city: yup.string().required("City is required"),
+  }),
   phone: yup
     .string()
     .min(9, "Phone number must be at least 9 digits")

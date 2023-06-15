@@ -3,47 +3,40 @@ import { Formik, Form } from "formik";
 import { basicSchema } from "./schema/schema";
 import CustomInput from "./components/CustomInput";
 import CustomSelect from "./components/CustomSelect";
+import { Person } from "./types";
+
+type Props = {
+  isModalOpen: boolean;
+  setIsModalOpen: (value: boolean) => void;
+  onAddPerson: (person: Person) => void;
+};
 
 export const AddPersonModal = ({
   isModalOpen,
   setIsModalOpen,
-  dataSource,
-  setDataSource,
-}: any) => {
-  const onAddPerson = (values: any) => {
-    const newPerson = {
-      id: dataSource.length + 1,
-      name: values.name,
-      email: values.email,
-      gender: values.gender,
-      address: {
-        street: values.street,
-        city: values.city,
-      },
-      phone: values.phone,
-    };
-    setDataSource([...dataSource, newPerson]);
-  };
-
+  onAddPerson,
+}: Props) => {
   const handleCancel = () => {
     setIsModalOpen(false);
   };
 
-  const onSubmit = async (values: any, actions: any) => {
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-    onAddPerson(values);
+  const onSubmit = async (person: Person) => {
+    // await new Promise((resolve) => setTimeout(resolve, 2000));
+    onAddPerson(person);
     setIsModalOpen(false);
-    actions.resetForm();
   };
 
   return (
     <Formik
       initialValues={{
+        id: 0,
         name: "",
         email: "",
         gender: "",
-        street: "",
-        city: "",
+        address: {
+          street: "",
+          city: "",
+        },
         phone: "",
       }}
       validationSchema={basicSchema}
@@ -78,20 +71,20 @@ export const AddPersonModal = ({
               label="email"
               placeholder="email"
             />
-            <CustomSelect name="gender" label="gender" placeholder="gender">
+            <CustomSelect name="gender" label="gender">
               <option value="">Select Gender</option>
               <option value="male">Male</option>
               <option value="female">Female</option>
             </CustomSelect>
             <CustomInput
               type="text"
-              name="street"
+              name="address.street"
               label="street"
               placeholder="street"
             />
             <CustomInput
               type="text"
-              name="city"
+              name="address.city"
               label="city"
               placeholder="city"
             />

@@ -4,18 +4,7 @@ import { Table, Button, Modal } from "antd";
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import { AddPersonModal } from "./AddPersonModal";
 import { EditPersonModal } from "./EditPersonModal";
-
-interface DataSourceItem {
-  id: number;
-  name: string;
-  email: string;
-  gender: string;
-  address: {
-    street: string;
-    city: string;
-  };
-  phone: string;
-}
+import { Person } from "./types";
 
 interface ColumnItem {
   key: number;
@@ -27,8 +16,8 @@ interface ColumnItem {
 function App() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [editingPerson, setEditingPerson] = useState<any>(null);
-  const [dataSource, setDataSource] = useState<DataSourceItem[]>([
+  const [editingPerson, setEditingPerson] = useState<Person | null>(null);
+  const [dataSource, setDataSource] = useState<Person[]>([
     {
       id: 1,
       name: "Vilma Jefferson",
@@ -75,12 +64,6 @@ function App() {
     },
   ]);
 
-  const doubleClickEdit = (record: any) => {
-    return {
-      onDoubleClick: () => onEditPerson(record),
-    };
-  };
-
   const columns: ColumnItem[] = [
     {
       key: 1,
@@ -122,15 +105,15 @@ function App() {
     {
       key: 8,
       title: "Action",
-      render: (record) => {
+      render: (person: Person) => {
         return (
           <>
             <EditOutlined
-              onClick={() => onEditPerson(record)}
+              onClick={() => onEditPerson(person)}
               style={{ cursor: "pointer" }}
             />
             <DeleteOutlined
-              onClick={() => onDeletePerson(record)}
+              onClick={() => onDeletePerson(person)}
               style={{ color: "red", marginLeft: 10, cursor: "pointer" }}
             />
           </>
@@ -139,9 +122,15 @@ function App() {
     },
   ];
 
-  const onEditPerson = (record: any) => {
+  const onEditPerson = (person: Person) => {
     setIsEditModalOpen(true);
-    setEditingPerson({ ...record });
+    setEditingPerson({ ...person });
+  };
+
+  const doubleClickEdit = (person: Person) => {
+    return {
+      onDoubleClick: () => onEditPerson(person),
+    };
   };
 
   const onDeletePerson = (action: any) => {
@@ -174,20 +163,43 @@ function App() {
         columns={columns}
         dataSource={dataSource}
       />
-      <AddPersonModal
-        isModalOpen={isModalOpen}
-        setIsModalOpen={setIsModalOpen}
-        dataSource={dataSource}
-        setDataSource={setDataSource}
-      />
-      <EditPersonModal
-        editingPerson={editingPerson}
-        setEditingPerson={setEditingPerson}
-        isEditModalOpen={isEditModalOpen}
-        setIsEditModalOpen={setIsEditModalOpen}
-        dataSource={dataSource}
-        setDataSource={setDataSource}
-      />
+      {isModalOpen && (
+        <AddPersonModal
+          isModalOpen={isModalOpen}
+          setIsModalOpen={setIsModalOpen}
+          onAddPerson={(person) => {
+            const newPerson = {
+              id: dataSource.length + 1,
+              name: person.name,
+              email: person.email,
+              gender: person.gender,
+              address: {
+                street: person.address.street,
+                city: person.address.city,
+              },
+              phone: person.phone,
+            };
+            setDataSource([...dataSource, newPerson]);
+          }}
+        />
+      )}
+      {editingPerson && (
+        <EditPersonModal
+          editingPerson={editingPerson}
+          isEditModalOpen={isEditModalOpen}
+          setIsEditModalOpen={setIsEditModalOpen}
+          onEditPerson={(person) => {
+            setDataSource((pre) => {
+              return pre.map((item) => {
+                if (item.id === editingPerson.id) {
+                  return { ...item, ...person };
+                }
+                return item;
+              });
+            });
+          }}
+        />
+      )}
     </div>
   );
 }
