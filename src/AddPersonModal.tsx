@@ -60,15 +60,15 @@ export const AddPersonModal = ({
         >
           <Form>
             <CustomInput
+              label="Name"
               type="text"
               name="name"
-              label="Name"
               placeholder="Name"
             />
             <CustomInput
+              label="email"
               type="email"
               name="email"
-              label="email"
               placeholder="email"
             />
             <CustomSelect name="gender" label="gender">
@@ -77,21 +77,21 @@ export const AddPersonModal = ({
               <option value="female">Female</option>
             </CustomSelect>
             <CustomInput
+              label="street"
               type="text"
               name="address.street"
-              label="street"
               placeholder="street"
             />
             <CustomInput
+              label="city"
               type="text"
               name="address.city"
-              label="city"
               placeholder="city"
             />
             <CustomInput
+              label="phone"
               type="text"
               name="phone"
-              label="phone"
               placeholder="phone"
             />
           </Form>

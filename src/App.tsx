@@ -1,10 +1,11 @@
 import "./App.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Table, Button, Modal } from "antd";
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import { AddPersonModal } from "./AddPersonModal";
 import { EditPersonModal } from "./EditPersonModal";
 import { Person } from "./types";
+import axios from "axios";
 
 interface ColumnItem {
   key: number;
@@ -63,6 +64,30 @@ function App() {
       phone: "+1 (947) 576-2508",
     },
   ]);
+
+  const url = "http://localhost:5000/";
+
+  useEffect(() => {
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    axios.get(`${url}person`, { headers }).then((response: any) => {
+      console.log("@@@@", response);
+      setDataSource(response.data);
+    });
+  }, []);
+
+  const updateUser = (person: Person) => {
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    axios
+      .post(`${url}update-persons`, person, { headers })
+      .then((response: any) => {
+        // setEditingPerson({ ...person });
+        setDataSource(response.data);
+      });
+  };
 
   const columns: ColumnItem[] = [
     {
@@ -189,14 +214,15 @@ function App() {
           isEditModalOpen={isEditModalOpen}
           setIsEditModalOpen={setIsEditModalOpen}
           onEditPerson={(person) => {
-            setDataSource((pre) => {
-              return pre.map((item) => {
-                if (item.id === editingPerson.id) {
-                  return { ...item, ...person };
-                }
-                return item;
-              });
-            });
+            updateUser(person);
+            // setDataSource((pre) => {
+            // return pre.map((item) => {
+            //   if (item.id === editingPerson.id) {
+            //     return { ...item, ...person };
+            //   }
+            //   return item;
+            // });
+            // });
           }}
         />
       )}

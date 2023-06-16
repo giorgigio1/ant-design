@@ -18,7 +18,7 @@ export const EditPersonModal = ({
   setIsEditModalOpen,
   onEditPerson,
 }: Props) => {
-  const onSubmit = (person: Person, action: any) => {
+  const onSubmit = (person: Person) => {
     onEditPerson(person);
     setIsEditModalOpen(false);
   };
@@ -45,26 +45,26 @@ export const EditPersonModal = ({
     >
       {({ handleSubmit, errors }) => {
         return (
-          <Form>
-            <Modal
-              title="Edit person"
-              open={isEditModalOpen}
-              onCancel={handleCancel}
-              footer={[
-                <Button key="back" onClick={handleCancel}>
-                  Cancel
-                </Button>,
-                <Button
-                  key="submit"
-                  type="primary"
-                  onClick={() => handleSubmit()}
-                >
-                  Yes
-                </Button>,
-              ]}
-              width={800}
-              centered
-            >
+          <Modal
+            title="Edit person"
+            open={isEditModalOpen}
+            onCancel={handleCancel}
+            footer={[
+              <Button key="back" onClick={handleCancel}>
+                Cancel
+              </Button>,
+              <Button
+                key="submit"
+                type="primary"
+                onClick={() => handleSubmit()}
+              >
+                Yes
+              </Button>,
+            ]}
+            width={800}
+            centered
+          >
+            <Form>
               <CustomInput
                 type="text"
                 name="name"
@@ -100,8 +100,8 @@ export const EditPersonModal = ({
                 label="phone"
                 placeholder="phone"
               />
-            </Modal>
-          </Form>
+            </Form>
+          </Modal>
         );
       }}
     </Formik>
