@@ -43,7 +43,7 @@ export const EditPersonModal = ({
       validationSchema={basicSchema}
       onSubmit={onSubmit}
     >
-      {({ handleSubmit, errors }) => {
+      {({ handleSubmit }) => {
         return (
           <Modal
             title="Edit person"

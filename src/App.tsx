@@ -71,20 +71,40 @@ function App() {
     const headers = {
       "Content-Type": "application/json",
     };
-    axios.get(`${url}person`, { headers }).then((response: any) => {
-      console.log("@@@@", response);
+    axios.get<Person[]>(`${url}person`, { headers }).then((response) => {
       setDataSource(response.data);
     });
   }, []);
+
+  const addUser = (person: Person) => {
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    axios
+      .post<Person[]>(`${url}add-persons`, person, { headers })
+      .then((response) => {
+        setDataSource(response.data);
+      });
+  };
 
   const updateUser = (person: Person) => {
     const headers = {
       "Content-Type": "application/json",
     };
     axios
-      .post(`${url}update-persons`, person, { headers })
-      .then((response: any) => {
-        // setEditingPerson({ ...person });
+      .post<Person[]>(`${url}update-persons`, person, { headers })
+      .then((response) => {
+        setDataSource(response.data);
+      });
+  };
+
+  const deleteUser = (person: Person) => {
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    axios
+      .post<Person[]>(`${url}delete-persons`, person, { headers })
+      .then((response) => {
         setDataSource(response.data);
       });
   };
@@ -158,17 +178,13 @@ function App() {
     };
   };
 
-  const onDeletePerson = (action: any) => {
+  const onDeletePerson = (person: Person) => {
     Modal.confirm({
       title: "Are you sure, you want to delete this person?",
       icon: <DeleteOutlined />,
       okText: "Yes",
       okType: "danger",
-      onOk: () => {
-        setDataSource((pre) => {
-          return pre.filter((item) => item.id !== action.id);
-        });
-      },
+      onOk: () => deleteUser(person),
     });
   };
 
@@ -193,18 +209,7 @@ function App() {
           isModalOpen={isModalOpen}
           setIsModalOpen={setIsModalOpen}
           onAddPerson={(person) => {
-            const newPerson = {
-              id: dataSource.length + 1,
-              name: person.name,
-              email: person.email,
-              gender: person.gender,
-              address: {
-                street: person.address.street,
-                city: person.address.city,
-              },
-              phone: person.phone,
-            };
-            setDataSource([...dataSource, newPerson]);
+            addUser(person);
           }}
         />
       )}
@@ -215,14 +220,6 @@ function App() {
           setIsEditModalOpen={setIsEditModalOpen}
           onEditPerson={(person) => {
             updateUser(person);
-            // setDataSource((pre) => {
-            // return pre.map((item) => {
-            //   if (item.id === editingPerson.id) {
-            //     return { ...item, ...person };
-            //   }
-            //   return item;
-            // });
-            // });
           }}
         />
       )}
