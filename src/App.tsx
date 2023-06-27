@@ -6,6 +6,7 @@ import { AddPersonModal } from "./AddPersonModal";
 import { EditPersonModal } from "./EditPersonModal";
 import { Person } from "./types";
 import axios from "axios";
+import PieChart from "./components/PieChart";
 
 interface ColumnItem {
   key: number;
@@ -71,9 +72,13 @@ function App() {
     const headers = {
       "Content-Type": "application/json",
     };
-    axios.get<Person[]>(`${url}person`, { headers }).then((response) => {
-      setDataSource(response.data);
-    });
+    try {
+      axios.get<Person[]>(`${url}person`, { headers }).then((response) => {
+        setDataSource(response.data);
+      });
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
   }, []);
 
   const addUser = (person: Person) => {
@@ -223,6 +228,7 @@ function App() {
           }}
         />
       )}
+      <PieChart dataSource={dataSource} />
     </div>
   );
 }
