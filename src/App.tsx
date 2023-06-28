@@ -96,6 +96,7 @@ function App() {
     const headers = {
       "Content-Type": "application/json",
     };
+    setEditingPerson(null);
     axios
       .post<Person[]>(`${url}update-persons`, person, { headers })
       .then((response) => {
@@ -173,8 +174,8 @@ function App() {
   ];
 
   const onEditPerson = (person: Person) => {
-    setIsEditModalOpen(true);
     setEditingPerson({ ...person });
+    setIsEditModalOpen(true);
   };
 
   const doubleClickEdit = (person: Person) => {
@@ -222,6 +223,7 @@ function App() {
         <EditPersonModal
           editingPerson={editingPerson}
           isEditModalOpen={isEditModalOpen}
+          setEditingPerson={setEditingPerson}
           setIsEditModalOpen={setIsEditModalOpen}
           onEditPerson={(person) => {
             updateUser(person);

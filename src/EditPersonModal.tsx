@@ -4,12 +4,14 @@ import { basicSchema } from "./schema/schema";
 import CustomInput from "./components/CustomInput";
 import CustomSelect from "./components/CustomSelect";
 import { Person } from "./types";
+import { Dispatch, SetStateAction } from "react";
 
 type Props = {
   editingPerson: Person;
   isEditModalOpen: boolean;
   setIsEditModalOpen: (value: boolean) => void;
   onEditPerson: (person: Person) => void;
+  setEditingPerson: Dispatch<SetStateAction<null | Person>>;
 };
 
 export const EditPersonModal = ({
@@ -17,29 +19,22 @@ export const EditPersonModal = ({
   isEditModalOpen,
   setIsEditModalOpen,
   onEditPerson,
+  setEditingPerson,
 }: Props) => {
-  const onSubmit = (person: Person) => {
-    onEditPerson(person);
+  const onSubmit = async (person: Person, { resetForm }: any) => {
+    await onEditPerson(person);
     setIsEditModalOpen(false);
+    setEditingPerson(null);
   };
 
   const handleCancel = () => {
     setIsEditModalOpen(false);
+    setEditingPerson(null);
   };
 
   return (
     <Formik
-      initialValues={{
-        id: editingPerson.id,
-        name: editingPerson.name,
-        email: editingPerson.email,
-        gender: editingPerson.gender,
-        address: {
-          street: editingPerson.address.street,
-          city: editingPerson.address.city,
-        },
-        phone: editingPerson.phone,
-      }}
+      initialValues={editingPerson}
       validationSchema={basicSchema}
       onSubmit={onSubmit}
     >
