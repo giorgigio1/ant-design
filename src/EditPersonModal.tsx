@@ -21,7 +21,7 @@ export const EditPersonModal = ({
   onEditPerson,
   setEditingPerson,
 }: Props) => {
-  const onSubmit = async (person: Person, { resetForm }: any) => {
+  const onSubmit = async (person: Person) => {
     await onEditPerson(person);
     setIsEditModalOpen(false);
     setEditingPerson(null);
