@@ -6,7 +6,7 @@ import { AddPersonModal } from "./AddPersonModal";
 import { EditPersonModal } from "./EditPersonModal";
 import { Person } from "./types";
 import axios from "axios";
-import PieChart from "./components/PieChart";
+import { useNavigate } from "react-router-dom";
 
 interface ColumnItem {
   key: number;
@@ -65,6 +65,8 @@ function App() {
       phone: "+1 (947) 576-2508",
     },
   ]);
+
+  const navigate = useNavigate();
 
   const url = "http://localhost:5000/";
 
@@ -230,7 +232,20 @@ function App() {
           }}
         />
       )}
-      <PieChart dataSource={dataSource} />
+      <button
+        onClick={() => navigate("/chart", { state: dataSource })}
+        style={{
+          margin: 20,
+          padding: 10,
+          borderRadius: 6,
+          border: "none",
+          backgroundColor: "#1677ff",
+          color: "white",
+          cursor: "pointer",
+        }}
+      >
+        GO TO PIE CHART
+      </button>
     </div>
   );
 }
