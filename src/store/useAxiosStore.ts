@@ -6,9 +6,11 @@ interface AxiosStore {
   data: Person[] | null;
   getData: () => Promise<void>;
   addPerson: (person: Person) => Promise<void>;
+  updatePerson: (person: Person) => Promise<void>;
+  deletePerson: (person: Person) => Promise<void>;
 }
 
-const url = "http://localhost:5000/";
+const url = "https://ant-design-api.vercel.app/";
 
 const useAxiosStore = create<AxiosStore>((set: SetState<AxiosStore>) => ({
   data: null,
