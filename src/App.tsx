@@ -1,12 +1,13 @@
 import "./App.css";
 import { useEffect, useState } from "react";
-import { Table, Button, Modal } from "antd";
+import { Table, Modal } from "antd";
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import { AddPersonModal } from "./AddPersonModal";
 import { EditPersonModal } from "./EditPersonModal";
 import { Person } from "./types";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import Button from "./components/button";
 
 interface ColumnItem {
   key: number;
@@ -198,14 +199,9 @@ function App() {
 
   return (
     <div className="app">
-      <Button
-        onClick={() => setIsModalOpen(true)}
-        type="primary"
-        style={{ margin: 20 }}
-      >
-        Add Person
-      </Button>
+      <Button onClick={() => setIsModalOpen(true)}>Add Person</Button>
       <Table
+        style={{ marginLeft: 30, marginRight: 30 }}
         onRow={doubleClickEdit}
         bordered
         rowKey="id"
@@ -214,6 +210,7 @@ function App() {
       />
       {isModalOpen && (
         <AddPersonModal
+          dataSource={dataSource}
           isModalOpen={isModalOpen}
           setIsModalOpen={setIsModalOpen}
           onAddPerson={(person) => {
@@ -232,20 +229,9 @@ function App() {
           }}
         />
       )}
-      <button
-        onClick={() => navigate("/chart", { state: dataSource })}
-        style={{
-          margin: 20,
-          padding: 10,
-          borderRadius: 6,
-          border: "none",
-          backgroundColor: "#1677ff",
-          color: "white",
-          cursor: "pointer",
-        }}
-      >
+      <Button onClick={() => navigate("/chart", { state: dataSource })}>
         GO TO PIE CHART
-      </button>
+      </Button>
     </div>
   );
 }

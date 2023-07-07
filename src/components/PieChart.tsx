@@ -1,6 +1,7 @@
 import { Pie } from "@ant-design/plots";
 import { Person } from "../types";
 import { useLocation, useNavigate } from "react-router-dom";
+import Button from "../components/button";
 
 const PieChart: React.FC = () => {
   const navigate = useNavigate();
@@ -33,21 +34,9 @@ const PieChart: React.FC = () => {
   return (
     <>
       <Pie {...config} />
-      <button
-        onClick={() => navigate(-1)}
-        style={{
-          margin: 20,
-          padding: 10,
-          borderRadius: 6,
-          border: "none",
-          backgroundColor: "#1677ff",
-          color: "white",
-          cursor: "pointer",
-          fontSize: 14,
-        }}
-      >
-        BACK TO TABLE
-      </button>
+      <div style={{ width: "100%", textAlign: "center" }}>
+        <Button onClick={() => navigate(-1)}> BACK TO TABLE</Button>
+      </div>
     </>
   );
 };

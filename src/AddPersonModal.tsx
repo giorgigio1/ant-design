@@ -9,12 +9,14 @@ type Props = {
   isModalOpen: boolean;
   setIsModalOpen: (value: boolean) => void;
   onAddPerson: (person: Person) => void;
+  dataSource: Person[];
 };
 
 export const AddPersonModal = ({
   isModalOpen,
   setIsModalOpen,
   onAddPerson,
+  dataSource,
 }: Props) => {
   const handleCancel = () => {
     setIsModalOpen(false);
@@ -29,7 +31,7 @@ export const AddPersonModal = ({
   return (
     <Formik
       initialValues={{
-        id: 0,
+        id: dataSource.length + 1,
         name: "",
         email: "",
         gender: "",
