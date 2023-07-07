@@ -5,9 +5,9 @@ import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import { AddPersonModal } from "./AddPersonModal";
 import { EditPersonModal } from "./EditPersonModal";
 import { Person } from "./types";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Button from "./components/button";
+import useAxiosStore from "./store/useAxiosStore";
 
 interface ColumnItem {
   key: number;
@@ -16,106 +16,31 @@ interface ColumnItem {
   render?: (data: any) => React.ReactNode;
 }
 
-function App() {
+function App(): JSX.Element {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editingPerson, setEditingPerson] = useState<Person | null>(null);
-  const [dataSource, setDataSource] = useState<Person[]>([
-    {
-      id: 1,
-      name: "Vilma Jefferson",
-      email: "vilmajefferson@gology.com",
-      gender: "female",
-      address: {
-        street: "Bath Avenue",
-        city: "New York",
-      },
-      phone: "+1 (814) 496-3905",
-    },
-    {
-      id: 2,
-      name: "Cassandra Nguyen",
-      email: "cassandranguyen@gology.com",
-      gender: "female",
-      address: {
-        street: "Hamilton Avenue",
-        city: "Chicago",
-      },
-      phone: "+1 (946) 426-2243",
-    },
-    {
-      id: 3,
-      name: "Lenora Clements",
-      email: "lenoraclements@gology.com",
-      gender: "female",
-      address: {
-        street: "Seba Avenue",
-        city: "San Diego",
-      },
-      phone: "+1 (838) 598-2355",
-    },
-    {
-      id: 4,
-      name: "Hanson Goodwin",
-      email: "hansongoodwin@gology.com",
-      gender: "male",
-      address: {
-        street: "Cranberry Street",
-        city: "New York",
-      },
-      phone: "+1 (947) 576-2508",
-    },
-  ]);
 
   const navigate = useNavigate();
 
-  const url = "http://localhost:5000/";
+  const { data, getData, addPerson, updatePerson, deletePerson }: any =
+    useAxiosStore();
 
   useEffect(() => {
-    const headers = {
-      "Content-Type": "application/json",
-    };
-    try {
-      axios.get<Person[]>(`${url}person`, { headers }).then((response) => {
-        setDataSource(response.data);
-      });
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
+    getData();
   }, []);
 
   const addUser = (person: Person) => {
-    const headers = {
-      "Content-Type": "application/json",
-    };
-    axios
-      .post<Person[]>(`${url}add-persons`, person, { headers })
-      .then((response) => {
-        setDataSource(response.data);
-      });
+    addPerson(person);
   };
 
   const updateUser = (person: Person) => {
-    const headers = {
-      "Content-Type": "application/json",
-    };
     setEditingPerson(null);
-    axios
-      .post<Person[]>(`${url}update-persons`, person, { headers })
-      .then((response) => {
-        setDataSource(response.data);
-      });
+    updatePerson(person);
   };
 
   const deleteUser = (person: Person) => {
-    const headers = {
-      "Content-Type": "application/json",
-    };
-    axios
-      .post<Person[]>(`${url}delete-persons`, person, { headers })
-      .then((response) => {
-        setDataSource(response.data);
-      });
+    deletePerson(person);
   };
 
   const columns: ColumnItem[] = [
@@ -206,11 +131,10 @@ function App() {
         bordered
         rowKey="id"
         columns={columns}
-        dataSource={dataSource}
+        dataSource={data}
       />
       {isModalOpen && (
         <AddPersonModal
-          dataSource={dataSource}
           isModalOpen={isModalOpen}
           setIsModalOpen={setIsModalOpen}
           onAddPerson={(person) => {
@@ -229,7 +153,7 @@ function App() {
           }}
         />
       )}
-      <Button onClick={() => navigate("/chart", { state: dataSource })}>
+      <Button onClick={() => navigate("/chart", { state: data })}>
         GO TO PIE CHART
       </Button>
     </div>

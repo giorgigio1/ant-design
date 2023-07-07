@@ -34,7 +34,7 @@ const PieChart: React.FC = () => {
   return (
     <>
       <Pie {...config} />
-      <div style={{ width: "100%", textAlign: "center" }}>
+      <div style={{ textAlign: "center" }}>
         <Button onClick={() => navigate(-1)}> BACK TO TABLE</Button>
       </div>
     </>
