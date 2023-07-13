@@ -1,19 +1,20 @@
 import { Pie } from "@ant-design/plots";
 import { Person } from "../types";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Button from "../components/button";
+import { useStore } from "../store/useStore";
 
 const PieChart: React.FC = () => {
   const navigate = useNavigate();
-  const { state } = useLocation();
+  const { persons } = useStore()
 
-  const allCities = state.map((item: Person) => item.address.city);
+  const allCities = persons.map((item: Person) => item.address.city);
   const filteredCities = new Set(allCities);
   const cities = Array.from(filteredCities);
 
   const data = cities.map((city) => ({
     type: city,
-    value: allCities.filter((item: Person) => item === city).length,
+    value: allCities.filter((item) => item === city).length,
   }));
 
   const config = {

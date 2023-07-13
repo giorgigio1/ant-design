@@ -22,26 +22,11 @@ function App(): JSX.Element {
 
   const navigate = useNavigate();
 
-  const {
-    persons: data,
-    getData,
-    addPerson,
-    updatePerson,
-    deletePerson,
-  } = useStore();
+  const { persons, getData, deletePerson } = useStore();
 
   useEffect(() => {
     getData();
   }, [getData]);
-
-  const addUser = (person: Person) => {
-    addPerson(person);
-  };
-
-  const updateUser = (person: Person) => {
-    setEditingPerson(null);
-    updatePerson(person);
-  };
 
   const deleteUser = (person: Person) => {
     deletePerson(person);
@@ -123,15 +108,12 @@ function App(): JSX.Element {
         bordered
         rowKey="id"
         columns={columns}
-        dataSource={data}
+        dataSource={persons}
       />
       {isModalOpen && (
         <AddPersonModal
           isModalOpen={isModalOpen}
           setIsModalOpen={setIsModalOpen}
-          onAddPerson={(person) => {
-            addUser(person);
-          }}
         />
       )}
       {editingPerson && (
@@ -140,12 +122,9 @@ function App(): JSX.Element {
           isEditModalOpen={isEditModalOpen}
           setEditingPerson={setEditingPerson}
           setIsEditModalOpen={setIsEditModalOpen}
-          onEditPerson={(person) => {
-            updateUser(person);
-          }}
         />
       )}
-      <Button onClick={() => navigate("/chart", { state: data })}>
+      <Button onClick={() => navigate("/chart")}>
         GO TO PIE CHART
       </Button>
     </div>

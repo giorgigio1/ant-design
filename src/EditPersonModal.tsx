@@ -5,12 +5,12 @@ import CustomInput from "./components/CustomInput";
 import CustomSelect from "./components/CustomSelect";
 import { Person } from "./types";
 import { Dispatch, SetStateAction } from "react";
+import { useStore } from "./store/useStore";
 
 type Props = {
   editingPerson: Person;
   isEditModalOpen: boolean;
   setIsEditModalOpen: (value: boolean) => void;
-  onEditPerson: (person: Person) => void;
   setEditingPerson: Dispatch<SetStateAction<null | Person>>;
 };
 
@@ -18,11 +18,12 @@ export const EditPersonModal = ({
   editingPerson,
   isEditModalOpen,
   setIsEditModalOpen,
-  onEditPerson,
   setEditingPerson,
 }: Props) => {
-  const onSubmit = async (person: Person) => {
-    await onEditPerson(person);
+  const { updatePerson } = useStore();
+
+  const onSubmit = (person: Person) => {
+    updatePerson(person);
     setIsEditModalOpen(false);
     setEditingPerson(null);
   };

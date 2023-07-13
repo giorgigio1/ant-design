@@ -5,27 +5,28 @@ import CustomInput from "./components/CustomInput";
 import CustomSelect from "./components/CustomSelect";
 import { Person } from "./types";
 import { useUuId } from "./hooks/useUuId";
+import { useStore } from "./store/useStore";
 
 type Props = {
   isModalOpen: boolean;
   setIsModalOpen: (value: boolean) => void;
-  onAddPerson: (person: Person) => void;
   dataSource?: Person[];
 };
 
 export const AddPersonModal = ({
   isModalOpen,
   setIsModalOpen,
-  onAddPerson,
 }: Props) => {
   const id = useUuId();
+
+  const { addPerson } = useStore()
 
   const handleCancel = () => {
     setIsModalOpen(false);
   };
 
   const onSubmit = async (person: Person) => {
-    onAddPerson(person);
+    addPerson(person);
     setIsModalOpen(false);
   };
 
