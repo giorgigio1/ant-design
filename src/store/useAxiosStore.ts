@@ -10,7 +10,8 @@ interface AxiosStore {
   deletePerson: (person: Person) => Promise<void>;
 }
 
-const url = "https://ant-design-api.vercel.app/";
+const url = "http://localhost:5000/";
+// const url = "https://ant-design-api.vercel.app/";
 
 const useAxiosStore = create<AxiosStore>((set: SetState<AxiosStore>) => ({
   data: null,
