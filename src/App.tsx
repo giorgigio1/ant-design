@@ -28,7 +28,7 @@ function App(): JSX.Element {
 
   useEffect(() => {
     getData();
-  }, []);
+  }, [getData]);
 
   const addUser = (person: Person) => {
     addPerson(person);
