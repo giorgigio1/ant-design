@@ -7,10 +7,9 @@ import { EditPersonModal } from "./EditPersonModal";
 import { Person } from "./types";
 import { useNavigate } from "react-router-dom";
 import Button from "./components/button";
-import useAxiosStore from "./store/useAxiosStore";
+import { useStore } from "./store/useStore";
 
 interface ColumnItem {
-  key: number;
   title: string;
   dataIndex?: string;
   render?: (data: any) => React.ReactNode;
@@ -23,8 +22,13 @@ function App(): JSX.Element {
 
   const navigate = useNavigate();
 
-  const { data, getData, addPerson, updatePerson, deletePerson }: any =
-    useAxiosStore();
+  const {
+    persons: data,
+    getData,
+    addPerson,
+    updatePerson,
+    deletePerson,
+  } = useStore();
 
   useEffect(() => {
     getData();
@@ -45,44 +49,32 @@ function App(): JSX.Element {
 
   const columns: ColumnItem[] = [
     {
-      key: 1,
-      title: "Id",
-      dataIndex: "id",
-    },
-    {
-      key: 2,
       title: "Name",
       dataIndex: "name",
     },
     {
-      key: 3,
       title: "Email",
       dataIndex: "email",
     },
     {
-      key: 4,
       title: "Gender",
       dataIndex: "gender",
     },
     {
-      key: 5,
       title: "Steet",
       dataIndex: "address",
       render: ({ street }) => street,
     },
     {
-      key: 6,
       title: "City",
       dataIndex: "address",
       render: ({ city }) => city,
     },
     {
-      key: 7,
       title: "Phone",
       dataIndex: "phone",
     },
     {
-      key: 8,
       title: "Action",
       render: (person: Person) => {
         return (

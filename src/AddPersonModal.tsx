@@ -4,7 +4,7 @@ import { basicSchema } from "./schema/schema";
 import CustomInput from "./components/CustomInput";
 import CustomSelect from "./components/CustomSelect";
 import { Person } from "./types";
-import useAxiosStore from "./store/useAxiosStore";
+import { useUuId } from "./hooks/useUuId";
 
 type Props = {
   isModalOpen: boolean;
@@ -18,14 +18,13 @@ export const AddPersonModal = ({
   setIsModalOpen,
   onAddPerson,
 }: Props) => {
-  const { data }: any = useAxiosStore();
+  const id = useUuId();
 
   const handleCancel = () => {
     setIsModalOpen(false);
   };
 
   const onSubmit = async (person: Person) => {
-    // await new Promise((resolve) => setTimeout(resolve, 2000));
     onAddPerson(person);
     setIsModalOpen(false);
   };
@@ -33,7 +32,7 @@ export const AddPersonModal = ({
   return (
     <Formik
       initialValues={{
-        id: data.length + 1,
+        id,
         name: "",
         email: "",
         gender: "",

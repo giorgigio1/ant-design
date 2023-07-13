@@ -16,6 +16,6 @@ export const basicSchema = yup.object().shape({
   phone: yup
     .string()
     .min(9, "Phone number must be at least 9 digits")
-    .matches(mobile, { message: "Please enter valid phone number" })
+    .matches(mobile, { message: "Please enter valid phone number (a.g. 5** *** ***)" })
     .required("Phone is required"),
 });

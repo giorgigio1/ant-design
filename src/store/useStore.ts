@@ -1,26 +1,26 @@
-import { create, SetState } from "zustand";
+import { create } from "zustand";
 import { Person } from "../types";
 import axios from "axios";
 
-interface AxiosStore {
-  data: Person[] | null;
+interface State {
+  persons: Person[];
   getData: () => Promise<void>;
   addPerson: (person: Person) => Promise<void>;
   updatePerson: (person: Person) => Promise<void>;
   deletePerson: (person: Person) => Promise<void>;
 }
 
-const url = "https://ant-design-api.vercel.app/";
+const url = "http://localhost:5000/";
 
-const useAxiosStore = create<AxiosStore>((set: SetState<AxiosStore>) => ({
-  data: null,
+export const useStore = create<State>((set) => ({
+  persons: [],
   getData: async () => {
     const headers = {
       "Content-Type": "application/json",
     };
     try {
       const response = await axios.get<Person[]>(`${url}person`, { headers });
-      set({ data: response.data });
+      set({ persons: response.data });
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -33,7 +33,7 @@ const useAxiosStore = create<AxiosStore>((set: SetState<AxiosStore>) => ({
       const response = await axios.post(`${url}add-persons`, person, {
         headers,
       });
-      set({ data: response.data });
+      set({ persons: response.data });
     } catch (error) {
       console.error("Error posting data:", error);
     }
@@ -46,7 +46,7 @@ const useAxiosStore = create<AxiosStore>((set: SetState<AxiosStore>) => ({
       const response = await axios.post(`${url}update-persons`, person, {
         headers,
       });
-      set({ data: response.data });
+      set({ persons: response.data });
     } catch (error) {
       console.error("Error posting data:", error);
     }
@@ -59,11 +59,9 @@ const useAxiosStore = create<AxiosStore>((set: SetState<AxiosStore>) => ({
       const response = await axios.post(`${url}delete-persons`, person, {
         headers,
       });
-      set({ data: response.data });
+      set({ persons: response.data });
     } catch (error) {
       console.error("Error posting data:", error);
     }
   },
 }));
-
-export default useAxiosStore;
